@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Service
 public class ProductService {
@@ -24,13 +25,30 @@ public class ProductService {
 
     public Product getProductById(int id) {
         return products.stream()
-                .filter(product -> product.getId() == id)
+                .filter(p -> p.getId() == id)
                 .findFirst()
-                .orElse(new Product(0, "No such item", 0));
+                .orElse(new Product(69, "No such item", 420));
     }
 
-    public void addProduct(Product product) {
-        products.add(product);
+    public void addProduct(Product prod) {
+        products.add(prod);
     }
 
+    public void updateProduct(Product prod) {
+        int index = IntStream.range(0, products.size())
+                .filter(i -> products.get(i).getId() == prod.getId())
+                .findFirst()
+                .orElse(-1);
+
+        if (index != -1) products.set(index, prod);
+    }
+
+    public void deleteProductById(int id) {
+        int index = IntStream.range(0, products.size())
+                .filter(i -> products.get(i).getId() == id)
+                .findFirst()
+                .orElse(-1);
+
+        if (index != -1) products.remove(index);
+    }
 }
